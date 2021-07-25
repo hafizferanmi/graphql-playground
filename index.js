@@ -7,6 +7,7 @@ const { books, libraries, authors, addresses } = require("./data");
 const typeDefs = gql`
   type Author {
     name: String
+    books: [Book]
   }
   type Book {
     title: String
@@ -15,7 +16,7 @@ const typeDefs = gql`
   }
   type Library {
     name: String
-    books: [Book]
+    books(genre: String): [Book]
     address: String
   }
   type Query {
@@ -46,6 +47,9 @@ const resolvers = {
     books: (library, args, context, info) => {
       return books.filter((book) => book.library === library.id);
     },
+  },
+  Author: {
+    books: (author) => books.filter((book) => book.author === author.id),
   },
 };
 
