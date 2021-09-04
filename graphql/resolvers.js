@@ -8,6 +8,11 @@ const books = async (_, input, ctx, info) => {
   return books;
 };
 
+const book = async (_, { id }, ctx, info) => {
+  const book = await BooksModel.findByPk(id);
+  return book;
+};
+
 const createBook = async (_, { authorId, title }, ctx, info) => {
   const book = await BooksModel.create({ title, authorId });
   return book;
@@ -36,6 +41,7 @@ const createAuthor = async (_, { name }, ctx, info) => {
 const resolvers = {
   Query: {
     books,
+    book,
     authors,
     libraries,
   },
@@ -47,10 +53,12 @@ const resolvers = {
   Book: {
     author: async ({ authorId }, input) => {
       const author = await AuthorsModel.findByPk(authorId);
+      console.log("Author data is being asked for");
       return author;
     },
     library: async ({ libraryId }) => {
       const library = await LibraryModel.findByPk(libraryId);
+      console.log("Library data is being asked for");
       return library;
     },
   },
