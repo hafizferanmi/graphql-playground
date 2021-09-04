@@ -3,8 +3,8 @@ const { makeExecutableSchema } = require("@graphql-tools/schema");
 const {
   ApolloServerPluginLandingPageGraphQLPlayground,
 } = require("apollo-server-core");
-const typeDefs = require("./graphql/typedef");
-const resolvers = require("./graphql/resolvers");
+const typeDefs = require("./typedef");
+const resolvers = require("./businesslogic/resolvers");
 
 const schema = makeExecutableSchema({
   typeDefs,
