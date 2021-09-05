@@ -1,6 +1,7 @@
 const { gql } = require("apollo-server");
 
 const Author = gql`
+  "Author gives information about a particular author"
   type Author {
     id: ID!
     name: String
