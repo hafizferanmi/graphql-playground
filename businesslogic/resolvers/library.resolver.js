@@ -1,4 +1,4 @@
-const BooksModel = require("../../models/books");
+const BooksModel = require("../../models-old/books");
 
 const books = async ({ id }) => {
   const books = await BooksModel.findAll({ where: { libraryId: id } });

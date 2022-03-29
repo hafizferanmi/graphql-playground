@@ -1,5 +1,5 @@
-const AuthorsModel = require("../../models/authors");
-const LibraryModel = require("../../models/library");
+const AuthorsModel = require("../../models-old/authors");
+const LibraryModel = require("../../models-old/library");
 
 const author = async ({ authorId }, input) => {
   const author = await AuthorsModel.findByPk(authorId);
