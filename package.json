@@ -5,6 +5,11 @@
   "main": "index.js",
   "scripts": {
     "start": "nodemon index.js",
+    "seed": "npx sequelize-cli db:seed:all",
+    "seed:revert": "npx sequelize-cli db:seed:undo",
+    "migration:generate": "npx sequelize-cli migration:generate --name migration-name",
+    "seed:generate": "npx sequelize-cli seed:generate --name seed-name",
+    "migrate": "npx sequelize-cli db:migrate",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
@@ -12,12 +17,18 @@
   "dependencies": {
     "@graphql-tools/schema": "^8.2.0",
     "apollo-server": "^3.0.2",
-    "apollo-server-core": "^3.0.2",
-    "graphql": "^15.5.1",
+    "apollo-server-core": "^3.6.7",
+    "apollo-server-express": "^3.6.7",
+    "express": "^4.17.3",
+    "graphql": "^16.3.0",
     "graphql-tools": "^8.2.0",
+    "lodash": "^4.17.21",
     "nodemon": "^2.0.12",
     "pg": "^8.7.1",
     "pg-hstore": "^2.3.4",
     "sequelize": "^6.6.5"
+  },
+  "devDependencies": {
+    "@faker-js/faker": "^6.1.1"
   }
 }

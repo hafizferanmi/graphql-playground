@@ -1,6 +1,5 @@
-const models = require('./models')
+const models = require("./models");
 const syncDatabase = async () => {
-  console.log(models, 'models')
   await models.sequelize.sync({ alter: true });
 };
 

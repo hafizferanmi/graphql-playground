@@ -1,21 +1,12 @@
-const { ApolloServer } = require("apollo-server");
-const { makeExecutableSchema } = require("@graphql-tools/schema");
-const {
-  ApolloServerPluginLandingPageGraphQLPlayground,
-} = require("apollo-server-core");
-const typeDefs = require("./typedef");
-const resolvers = require("./businesslogic/resolvers");
+const express = require("express");
+const app = express();
+const port = 4500;
+const { getPosts } = require("./controller/post-controller");
+const { createUser } = require("./controller/user-controller");
 
-const schema = makeExecutableSchema({
-  typeDefs,
-  resolvers,
+app.get("/", getPosts);
+app.get("/create-user", createUser);
+
+app.listen(port, () => {
+  console.log(`App listening on port ${port}`);
 });
-
-const plugins = [ApolloServerPluginLandingPageGraphQLPlayground({})];
-
-const server = new ApolloServer({
-  schema,
-  plugins,
-});
-
-server.listen(4200).then(() => console.log("App running!!"));
