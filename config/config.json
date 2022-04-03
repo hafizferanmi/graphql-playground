@@ -1,16 +1,16 @@
 {
   "development": {
-    "username": "macbookpro2020",
+    "username": "root",
     "password": null,
     "database": "hms",
     "host": "127.0.0.1",
-    "dialect": "postgres",
+    "dialect": "mysql",
     "logging": false
   },
   "test": {
-    "username": "root",
+    "username": "macbookpro2020",
     "password": null,
-    "database": "database_test",
+    "database": "hms",
     "host": "127.0.0.1",
     "dialect": "postgresql"
   },

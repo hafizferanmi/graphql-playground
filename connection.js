@@ -13,6 +13,6 @@ const checkConnection = async () => {
 };
 
 checkConnection();
-syncDatabase();
+// syncDatabase();
 
 module.exports = models.sequelize;

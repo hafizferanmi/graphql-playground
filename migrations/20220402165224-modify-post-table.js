@@ -4,15 +4,6 @@ module.exports = {
   async up(queryInterface, Sequelize) {
     const transaction = await queryInterface.sequelize.transaction();
     try {
-      await queryInterface.addColumn(
-        "posts",
-        "premium",
-        {
-          type: DataTypes.BOOLEAN,
-          default: false,
-        },
-        { transaction }
-      );
       await queryInterface.changeColumn(
         "posts",
         "desc",
@@ -30,7 +21,6 @@ module.exports = {
   async down(queryInterface, Sequelize) {
     const transaction = await queryInterface.sequelize.transaction();
     try {
-      await queryInterface.removeColumn("posts", "premium", { transaction });
       await queryInterface.changeColumn(
         "posts",
         "desc",
