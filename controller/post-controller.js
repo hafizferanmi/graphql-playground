@@ -6,8 +6,10 @@ exports.getPosts = async (req, res, next) => {
     const a = await models.posts.findAll({
       include: { model: models.comments, where: { published: true }, limit: 2 },
       where: {
-        id: 6,
+        published: true,
       },
+      skip: 10,
+      limit: 5,
     });
     res.json({ success: true, results: a });
   } catch (e) {
