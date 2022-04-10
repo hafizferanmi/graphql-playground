@@ -1,7 +1,8 @@
 const db = require("../connection");
 const _ = require("lodash");
+const { faker } = require("@faker-js/faker");
 
-const { models } = db;
+const { models, posts } = db;
 
 exports.getPosts = async (req, res, next) => {
   try {
@@ -18,13 +19,13 @@ exports.getPosts = async (req, res, next) => {
         },
         { model: models.users, attributes: ["id", "username"] },
       ],
-
       offset: 10,
       limit: 5,
     });
     res.json({ success: true, results: posts });
   } catch (e) {
     console.log(e);
+    next(e);
   }
 };
 
@@ -35,17 +36,21 @@ exports.createPost = async (req, res) => {
     transaction = await db.transaction();
     const newPost = await models.posts.create(
       {
-        title: "A newly created post",
+        title: faker.random.words(faker.datatype.number({ min: 3, max: 5 })),
         userId: 10,
-        summary: "Some nice articles coming to your ",
-        tags: [{ name: "haruna" }, { name: "isa" }],
+        summary: faker.random.words(
+          faker.datatype.number({ min: 30, max: 40 })
+        ),
+        tags: [{ name: faker.random.word() }, { name: faker.random.word() }],
       },
-      { include: [models.tags], transaction }
+      { include: [models.tags], transaction: models.user }
     );
 
     const post = await models.posts.findByPk(newPost.id, {
-      include: { model: models.tags, through: { attributes: [] } },
-      include: { model: models.users },
+      include: [
+        { model: models.tags, through: { attributes: [] } },
+        { model: models.users, attributes: ["id", "username"] },
+      ],
       transaction,
     });
 
@@ -56,7 +61,10 @@ exports.createPost = async (req, res) => {
     if (transaction) {
       await transaction.rollback();
     }
-    console.log(e);
+    if (e.name === "SequelizeValidationError")
+      res.status(400).json({
+        errors: e?.errors?.map((e) => ({ message: e.message, path: e.path })),
+      });
   }
 };
 

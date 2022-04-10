@@ -10,10 +10,20 @@ module.exports = (sequelize) => {
         through: "posts_tags",
       });
     }
+    toJSON() {
+      return { ...this.get(), userId: undefined };
+    }
   }
   Posts.init(
     {
-      title: DataTypes.STRING,
+      title: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        validate: {
+          notEmpty: { msg: "Title cannot be empty" },
+          len: { args: [5], msg: "Title must be at least 5 characters" },
+        },
+      },
       desc: DataTypes.TEXT,
       published: { type: DataTypes.BOOLEAN, defaultValue: true },
       premium: {
