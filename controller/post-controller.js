@@ -6,12 +6,19 @@ const { models } = db;
 exports.getPosts = async (req, res, next) => {
   try {
     const posts = await models.posts.findAll({
-      include: { model: models.comments, where: { published: true }, limit: 2 },
-      include: { model: models.tags, as: "tags" },
-      include: { model: models.users },
       where: {
         published: true,
       },
+      include: [
+        { model: models.comments, limit: 2 },
+        {
+          model: models.tags,
+          attributes: ["id", "name"],
+          through: { attributes: [] },
+        },
+        { model: models.users, attributes: ["id", "username"] },
+      ],
+
       offset: 10,
       limit: 5,
     });
@@ -56,14 +63,15 @@ exports.createPost = async (req, res) => {
 exports.getPost = async (req, res) => {
   try {
     if (!_.toNumber(req.params.id)) throw new Error("id is required");
-    const post = await models.posts.findByPk(req.params.id, {
-      include: models.users,
-      include: { model: models.tags, through: { attributes: [] } },
-      require: true,
-    });
 
-    const user = await post.getUser();
-    res.json({ post, user });
+    const post = await models.posts.findByPk(req.params.id, {
+      include: [
+        { model: models.users },
+        { model: models.tags, through: { attributes: [] } },
+        { model: models.comments, limit: 1, attributes: ["id", "body"] },
+      ],
+    });
+    res.json({ post });
   } catch (e) {
     console.log(e);
     res.status(400).json(e.message);
