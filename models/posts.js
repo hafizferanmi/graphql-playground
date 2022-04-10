@@ -5,10 +5,9 @@ module.exports = (sequelize) => {
     static associate(models) {
       Posts.belongsTo(models.users);
       Posts.hasMany(models.comments);
-      Posts.hasMany(model.tags, {
+      Posts.belongsToMany(models.tags, {
         foreignKey: "postId",
         through: "posts_tags",
-        as: "posts",
       });
     }
   }
@@ -20,6 +19,14 @@ module.exports = (sequelize) => {
       premium: {
         type: DataTypes.BOOLEAN,
         defaultValue: false,
+      },
+      userId: {
+        type: DataTypes.INTEGER,
+        references: {
+          model: "users",
+          key: "id",
+        },
+        onDelete: "CASCADE",
       },
     },
     {
