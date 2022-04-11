@@ -1,26 +1,33 @@
 const db = require("../connection");
+const { Op } = require("sequelize");
 const _ = require("lodash");
 const { faker } = require("@faker-js/faker");
 
-const { models, posts } = db;
+const { models } = db;
+const PostModel = models.posts;
+const TagsModel = models.tags;
 
 exports.getPosts = async (req, res, next) => {
+  const tagsIn = [10, 1];
   try {
-    const posts = await models.posts.findAll({
-      where: {
-        published: true,
-      },
+    const posts = await PostModel.findAll({
+      where: {},
+      order: [["createdAt", "DESC"]],
       include: [
         { model: models.comments, limit: 2 },
         {
-          model: models.tags,
+          model: TagsModel,
           attributes: ["id", "name"],
+          where: { id: { [Op.notIn]: tagsIn } },
           through: { attributes: [] },
         },
-        { model: models.users, attributes: ["id", "username"] },
+        {
+          model: models.users,
+          attributes: ["id", "username"],
+        },
       ],
       offset: 10,
-      limit: 5,
+      limit: 10,
     });
     res.json({ success: true, results: posts });
   } catch (e) {
