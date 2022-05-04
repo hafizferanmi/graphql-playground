@@ -5,12 +5,12 @@
   "main": "index.js",
   "scripts": {
     "start": "nodemon index.js",
+    "migrate": "npx sequelize-cli db:migrate",
+    "make:migration": "node ./scripts/create-sequelize-migrations.js",
+    "migrate:undo": "npx sequelize-cli db:migrate:undo",
     "seed": "npx sequelize-cli db:seed:all",
     "seed:revert": "npx sequelize-cli db:seed:undo",
-    "migration:generate": "node ./scripts/create-sequelize-migrations.js",
-    "migrate:undo": "npx sequelize-cli db:migrate:undo",
-    "seed:generate": "npx sequelize-cli seed:generate --name seed-name",
-    "migrate": "npx sequelize-cli db:migrate",
+    "make:seeder": "node ./scripts/create-sequelize-seeders.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
