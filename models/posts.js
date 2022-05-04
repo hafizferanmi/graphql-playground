@@ -42,6 +42,11 @@ module.exports = (sequelize) => {
     {
       sequelize,
       modelName: "posts",
+      scopes: {
+        withoutDesc: {
+          attributes: { exclude: ["desc"] },
+        },
+      },
     }
   );
   return Posts;

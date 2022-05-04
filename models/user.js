@@ -1,6 +1,15 @@
 "use strict";
 const { Model } = require("sequelize");
 const crypto = require("crypto");
+
+const HIDDEN_FIELDS = [
+  "password",
+  "token",
+  "resetPasswordToken",
+  "resetPasswordTokenExpiresAt",
+  "pin",
+];
+
 module.exports = (sequelize, DataTypes) => {
   class User extends Model {
     /**
@@ -12,6 +21,14 @@ module.exports = (sequelize, DataTypes) => {
       // define association here
       User.hasMany(models.posts);
       User.hasMany(models.comments);
+    }
+
+    toJSON() {
+      let attributes = Object.assign({}, this.get());
+      for (let field of HIDDEN_FIELDS) {
+        delete attributes[field];
+      }
+      return attributes;
     }
   }
   User.init(

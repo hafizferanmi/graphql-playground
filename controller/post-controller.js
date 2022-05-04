@@ -2,19 +2,28 @@ const db = require("../connection");
 const { Op } = require("sequelize");
 const _ = require("lodash");
 const { faker } = require("@faker-js/faker");
+const { notAllowed } = require("../utils");
 
-const { models } = db;
-const PostModel = models.posts;
-const TagsModel = models.tags;
+const {
+  posts: PostModel,
+  tags: TagsModel,
+  comments: CommentModel,
+  users: UsersModel,
+} = db.models;
 
 exports.getPosts = async (req, res, next) => {
   const tagsIn = [10, 1];
+  const { page = 1, resultsPerPage = 100, types = ["settlement"] } = req.query;
   try {
-    const posts = await PostModel.findAll({
+    // if ("haruna") return next(createHttpError(StatusCodes.NOT_FOUND));
+    // if ("haruna") throw createHttpError(StatusCodes.UNAUTHORIZED);
+    // if ("haruna") return next(notAllowed("This reqest no fit go laelae"));
+    console.log("Lets see if the code gets here");
+    const posts = await PostModel.scope("withoutDesc").findAll({
       where: {},
       order: [["createdAt", "DESC"]],
       include: [
-        { model: models.comments, limit: 2 },
+        { model: CommentModel, limit: 2 },
         {
           model: TagsModel,
           attributes: ["id", "name"],
@@ -22,7 +31,7 @@ exports.getPosts = async (req, res, next) => {
           through: { attributes: [] },
         },
         {
-          model: models.users,
+          model: UsersModel,
           attributes: ["id", "username"],
         },
       ],
@@ -31,7 +40,7 @@ exports.getPosts = async (req, res, next) => {
     });
     res.json({ success: true, results: posts });
   } catch (e) {
-    console.log(e);
+    // console.log(e);
     next(e);
   }
 };
